@@ -1,0 +1,49 @@
+[project]
+name = "cost-estimator"
+version = "0.1.0"
+description = "Add your description here"
+authors = [
+    { name = "Pascal Kraus", email = "pascal98kraus@gmail.com" }
+]
+dependencies = [
+    "osfclient>=0.0.5",
+]
+readme = "README.md"
+requires-python = ">= 3.12"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.rye]
+managed = true
+dev-dependencies = [
+    "ruff>=0.5.7",
+]
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/cost_estimator"]
+
+[tool.ruff]
+target-version = "py312"
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "C",   # flake8-comprehensions
+    "B",   # flake8-bugbear
+    "SIM", # flake8-simplify
+    "UP", # pyupgrade
+]
+ignore = []
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]
+[tool.ruff.format]
+docstring-code-format = true

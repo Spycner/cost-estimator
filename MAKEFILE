@@ -1,0 +1,50 @@
+# Makefile for cost-estimator project
+
+# Python interpreter
+PYTHON := python
+
+# Virtual environment
+VENV := .venv
+
+ifeq ($(OS),Windows_NT)
+    VENV_ACTIVATE := $(VENV)/Scripts/activate
+else
+    VENV_ACTIVATE := $(VENV)/bin/activate
+endif
+
+SETUP ?= rye
+
+ifeq ($(SETUP),rye)
+  SETUP_CMD := rye sync
+else
+  SETUP_CMD := $(PYTHON) -m venv $(VENV) && . $(VENV_ACTIVATE) && pip install -r requirements.lock
+endif
+
+# Source directory
+SRC_DIR := src
+
+# Test directory
+TEST_DIR := tests
+
+# Default target
+.DEFAULT_GOAL := help
+
+.PHONY: help setup lint format download
+
+help:
+	@echo "Available commands:"
+	@echo "  setup     : Create virtual environment and install dependencies"
+	@echo "  lint      : Run linter"
+	@echo "  format    : Format code"
+	@echo "  download  : Download data"
+setup:
+	$(SETUP_CMD)
+
+lint: setup
+	. $(VENV_ACTIVATE) && ruff check $(SRC_DIR)
+
+format: setup
+	. $(VENV_ACTIVATE) && ruff format $(SRC_DIR)
+
+download: setup
+	. $(VENV_ACTIVATE) && $(PYTHON) $(SRC_DIR)/cost_estimator/data/osf.py

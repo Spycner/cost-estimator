@@ -1,0 +1,13 @@
+# python generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# venv
+.venv
+
+# Ignore data folder in the root of the project
+/data/
