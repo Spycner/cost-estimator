@@ -11,3 +11,4 @@ wheels/
 
 # Ignore data folder in the root of the project
 /data/
+/logs/
