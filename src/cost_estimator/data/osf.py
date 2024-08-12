@@ -3,6 +3,7 @@ OSF client for downloading data.
 """
 
 import os
+import shutil
 import zipfile
 
 import tqdm
@@ -90,24 +91,42 @@ def move_downloads():
 
     for dataset in DATASETS:
         src_zip = os.path.join(_DOWNLOAD_DIR, f"{dataset}.zip")
-        dst = os.path.join(_DATA_DIR, dataset)
         if os.path.exists(src_zip):
             with zipfile.ZipFile(src_zip, "r") as zip_ref:
-                zip_ref.extractall(dst)
+                zip_ref.extractall(_DATA_DIR)
             os.remove(src_zip)
             main_logger.debug(f"Unzipped and moved dataset: {dataset}")
 
     for run in RUNS:
         src_zip = os.path.join(_DOWNLOAD_DIR, f"{run}.zip")
-        dst = os.path.join(_RUNS_DIR, run)
         if os.path.exists(src_zip):
             with zipfile.ZipFile(src_zip, "r") as zip_ref:
-                zip_ref.extractall(dst)
+                zip_ref.extractall(_RUNS_DIR)
             os.remove(src_zip)
             main_logger.debug(f"Unzipped and moved run: {run}")
 
     main_logger.info("File unzipping and movement completed")
 
 
+def clean_up():
+    """
+    Clean up the temporary download directory.
+    """
+    main_logger.info("Cleaning up temporary download directory")
+    shutil.rmtree(_DOWNLOAD_DIR)
+
+
 if __name__ == "__main__":
-    download_project("ga2xj")
+    import argparse
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--osf_id", type=str, default="ga2xj")
+    parser.add_argument(
+        "--clean_up", action="store_true", help="Run clean up operation"
+    )
+    args = parser.parse_args()
+
+    if args.clean_up:
+        clean_up()
+    else:
+        download_project(args.osf_id)

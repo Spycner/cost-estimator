@@ -29,7 +29,7 @@ TEST_DIR := tests
 # Default target
 .DEFAULT_GOAL := help
 
-.PHONY: help setup lint format download
+.PHONY: help setup lint format download clean_up
 
 help:
 	@echo "Available commands:"
@@ -37,6 +37,7 @@ help:
 	@echo "  lint      : Run linter"
 	@echo "  format    : Format code"
 	@echo "  download  : Download data"
+	@echo "  clean_up  : Run clean up operation"
 setup:
 	$(SETUP_CMD)
 
@@ -48,3 +49,6 @@ format: setup
 
 download: setup
 	. $(VENV_ACTIVATE) && $(PYTHON) $(SRC_DIR)/cost_estimator/data/osf.py
+
+clean_up:
+	. $(VENV_ACTIVATE) && $(PYTHON) $(SRC_DIR)/cost_estimator/data/osf.py --clean_up
